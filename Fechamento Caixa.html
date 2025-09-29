@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Lounge Eletrônicos — Fechamento de Caixa (Mockup com Histórico)</title>
+<style>
+  :root{
+    --yellow:#ffb400;
+    --black:#0b0b0b;
+    --muted:#f6f6f6;
+    --blue:#2d6cdf;
+    --card-radius:14px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  body{ margin:0; background:linear-gradient(180deg, #fff 0%, #fbfbfb 100%); color:var(--black); }
+  header{ background:var(--black); color:var(--yellow); padding:20px 28px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 18px rgba(11,11,11,0.08);}
+  header h1{ margin:0; font-size:20px; letter-spacing:0.3px; }
+  header a{ color:var(--yellow); text-decoration:none; font-weight:600 }
+  .container{ display:flex; gap:28px; padding:28px; max-width:1200px; margin:28px auto; }
+  nav{ width:220px; }
+  .nav-card{ background:var(--muted); border-radius:12px; padding:18px; box-shadow:0 6px 20px rgba(11,11,11,0.03); }
+  .nav-card a{ display:block; padding:10px 12px; border-radius:8px; color:var(--black); text-decoration:none; margin-bottom:6px; font-weight:600; }
+  .nav-card a.active{ background:var(--yellow); color:var(--black); }
+  main{ flex:1; }
+  .card{ background:white; border-radius:var(--card-radius); padding:22px; margin-bottom:18px; box-shadow:0 6px 30px rgba(11,11,11,0.04); }
+  h2{ margin:0 0 12px 0; font-size:28px; }
+  .section-title{ font-size:18px; margin:6px 0 12px 0; font-weight:700; color:#111; }
+  table{ width:100%; border-collapse:collapse; margin-bottom:12px; }
+  th, td{ text-align:left; padding:12px 14px; border-bottom:1px solid #efefef; }
+  th{ font-weight:700; color:#222; background:transparent; }
+  .value{ text-align:right; font-weight:700; }
+  .btn{ display:inline-block; padding:10px 14px; border-radius:10px; background:var(--blue); color:white; text-decoration:none; font-weight:700; border:none; cursor:pointer; }
+  .btn.secondary{ background:transparent; color:var(--black); border:1px solid #ddd; }
+  .kpi-row{ display:flex; gap:18px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+  .kpi{ background:linear-gradient(180deg,#fff,#fafafa); padding:12px 14px; border-radius:12px; min-width:160px; box-shadow:0 4px 14px rgba(11,11,11,0.03); }
+  .kpi small{ display:block; color:#777; }
+  .kpi strong{ display:block; font-size:18px; margin-top:6px; }
+  input[type="text"], input[type="number"]{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e6e6; font-size:15px; box-sizing:border-box; }
+  .row{ display:flex; gap:12px; }
+  .col{ flex:1; }
+  footer{ text-align:center; padding:14px; color:#666; }
+  .history-list{ max-height:320px; overflow:auto; }
+  .history-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px; border-radius:8px; background:#fff; margin-bottom:8px; box-shadow:0 4px 10px rgba(11,11,11,0.03); }
+  .muted{ color:#777; font-size:13px; }
+  @media(max-width:900px){
+    .container{ padding:14px; margin:14px; flex-direction:column; }
+    nav{ width:100%; order:2; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Lounge Eletrônicos</h1>
+
+</header>
+
+<div class="container">
+  <nav>
+    <div class="nav-card">
+      <a href="#" class="active">Fechamento de Caixa</a>
+  
+    </div>
+  </nav>
+
+  <main>
+    <div class="card" id="card-fechamento">
+      <h2>Fechamento de Caixa</h2>
+      <p class="section-title">Gastos</p>
+      <table id="table-gastos" aria-label="gastos">
+        <thead><tr><th>Descrição</th><th class="value">Valor (R$)</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" value="Manutenção" data-type="gasto-name"></td><td class="value"><input type="number" value="0" data-type="gasto-value" min="0"></td></tr>
+          <tr><td><input type="text" value="Outra Manutenção" data-type="gasto-name"></td><td class="value"><input type="number" value="0" data-type="gasto-value" min="0"></td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;gap:10px">
+        <button class="btn" onclick="addRow('gastos')">Adicionar Gastos</button>
+        <button class="btn secondary" onclick="clearSection('gastos')">Limpar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Compras de Material</p>
+      <table id="table-compras" aria-label="compras">
+        <thead><tr><th>Descrição</th><th class="value">Valor (R$)</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" value="Películas" data-type="comp-name"></td><td class="value"><input type="number" value="0" data-type="comp-value" min="0"></td></tr>
+          <tr><td><input type="text" value="Carregadores" data-type="comp-name"></td><td class="value"><input type="number" value="0" data-type="comp-value" min="0"></td></tr>
+          <tr><td><input type="text" value="China (importação)" data-type="comp-name"></td><td class="value"><input type="number" value="0" data-type="comp-value" min="0"></td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;gap:10px">
+        <button class="btn" onclick="addRow('compras')">Adicionar Compra</button>
+        <button class="btn secondary" onclick="clearSection('compras')">Limpar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Vendas (loja)</p>
+      <table id="table-vendas" aria-label="vendas">
+        <thead><tr><th>Meio</th><th class="value">Valor (R$)</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" value="Cartão" data-type="venda-name"></td><td class="value"><input type="number" value="0" data-type="venda-value" min="0"></td></tr>
+          <tr><td><input type="text" value="PIX" data-type="venda-name"></td><td class="value"><input type="number" value="0" data-type="venda-value" min="0"></td></tr>
+          <tr><td><input type="text" value="Dinheiro (DH)" data-type="venda-name"></td><td class="value"><input type="number" value="0" data-type="venda-value" min="0"></td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;gap:10px">
+        <button class="btn" onclick="addRow('vendas')">Adicionar Venda</button>
+        <button class="btn secondary" onclick="clearSection('vendas')">Limpar</button>
+      </div>
+
+      <div class="kpi-row" style="margin-top:18px;">
+        <div class="kpi"><small>Total de Vendas</small><strong id="total-vendas">0,00</strong></div>
+        <div class="kpi"><small>Total de Gastos</small><strong id="total-gastos">0,00</strong></div>
+        <div class="kpi"><small>Lucro / Prejuízo</small><strong id="lucro">0,00</strong></div>
+        <div class="kpi"><small>Data</small><strong id="data-fechamento"></strong></div>
+      </div>
+
+      <div style="margin-top:16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <button class="btn" onclick="salvarFechamento()">Salvar Fechamento</button>
+        <button class="btn secondary" onclick="exportarCSV()">Exportar CSV</button>
+        <button class="btn secondary" onclick="exportarJSONAtual()">Exportar JSON</button>
+      </div>
+    </div>
+
+    <div class="card" id="card-historico">
+      <h2>Histórico de Fechamentos (Backup local)</h2>
+      <p class="muted">Os fechamentos ficam salvos no seu navegador. Você pode exportar todos ou limpar o histórico.</p>
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button class="btn" onclick="exportAllCSV()">Exportar Tudo (CSV)</button>
+        <button class="btn" onclick="exportAllJSON()">Exportar Tudo (JSON)</button>
+        <button class="btn secondary" onclick="confirmClearHistory()">Limpar Histórico</button>
+      </div>
+      <div class="history-list" id="history-list" aria-live="polite"></div>
+    </div>
+
+  </main>
+</div>
+
+<footer> Lounge Eletrônicos </footer>
+
+<script>
+// ---------- util ----------
+function moedaBR(num){
+  return Number(num).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function recalc(){
+  const vendaInputs = Array.from(document.querySelectorAll('[data-type="venda-value"]'));
+  const vendas = vendaInputs.reduce((s, el) => s + Number(el.value || 0), 0);
+  document.getElementById('total-vendas').innerText = 'R$ ' + moedaBR(vendas);
+
+  const gastoInputs = Array.from(document.querySelectorAll('[data-type="gasto-value"]'));
+  const gastos = gastoInputs.reduce((s, el) => s + Number(el.value || 0), 0);
+
+  const compInputs = Array.from(document.querySelectorAll('[data-type="comp-value"]'));
+  const compras = compInputs.reduce((s, el) => s + Number(el.value || 0), 0);
+
+  const totalGastos = gastos + compras;
+  document.getElementById('total-gastos').innerText = 'R$ ' + moedaBR(totalGastos);
+
+  const lucro = vendas - totalGastos;
+  const lucroEl = document.getElementById('lucro');
+  lucroEl.innerText = (lucro >= 0 ? 'R$ ' : '-R$ ') + moedaBR(Math.abs(lucro));
+  lucroEl.style.color = (lucro >= 0 ? 'green' : 'crimson');
+  document.getElementById('data-fechamento').innerText = new Date().toLocaleDateString('pt-BR');
+}
+
+function addRow(section){
+  let table, nameAttr, valueAttr;
+  if(section === 'gastos'){
+    table = document.getElementById('table-gastos').querySelector('tbody');
+    nameAttr = 'gasto-name'; valueAttr = 'gasto-value';
+  } else if(section === 'compras'){
+    table = document.getElementById('table-compras').querySelector('tbody');
+    nameAttr = 'comp-name'; valueAttr = 'comp-value';
+  } else {
+    table = document.getElementById('table-vendas').querySelector('tbody');
+    nameAttr = 'venda-name'; valueAttr = 'venda-value';
+  }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input type="text" value="" data-type="${nameAttr}"></td><td class="value"><input type="number" value="0" data-type="${valueAttr}" min="0"></td>`;
+  table.appendChild(tr);
+  attachListeners();
+  recalc();
+}
+
+function clearSection(section){
+  let tbody;
+  if(section === 'gastos') tbody = document.getElementById('table-gastos').querySelector('tbody');
+  if(section === 'compras') tbody = document.getElementById('table-compras').querySelector('tbody');
+  if(section === 'vendas') tbody = document.getElementById('table-vendas').querySelector('tbody');
+  if(!tbody) return;
+  tbody.querySelectorAll('tr').forEach((tr,idx) => {
+    if(idx>0) tr.remove();
+    else{
+      tr.querySelectorAll('input').forEach(input => {
+        if(input.type==='number') input.value = 0;
+        else input.value = '';
+      });
+    }
+  });
+  recalc();
+}
+
+function attachListeners(){
+  document.querySelectorAll('input[type="number"]').forEach(inp => {
+    inp.oninput = recalc;
+  });
+}
+attachListeners();
+recalc();
+
+// ---------- histórico (localStorage) ----------
+const STORAGE_KEY = 'lounge_fechamentos_v1';
+
+function loadHistory(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  let items = [];
+  try{ items = raw ? JSON.parse(raw) : []; }catch(e){ items = []; }
+  renderHistory(items);
+  return items;
+}
+
+function saveHistory(items){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items || []));
+  renderHistory(items);
+}
+
+function renderHistory(items){
+  const container = document.getElementById('history-list');
+  container.innerHTML = '';
+  if(!items || items.length===0){
+    container.innerHTML = '<div class="muted">Nenhum fechamento salvo ainda. Use "Salvar Fechamento" para armazenar.</div>';
+    return;
+  }
+  [...items].reverse().forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'history-row';
+    div.innerHTML = `
+      <div style="flex:1">
+        <div style="font-weight:700">${item.date} — ${item.title || 'Fechamento'}</div>
+        <div class="muted">Vendas: R$ ${moedaBR(item.totals.vendas)} • Gastos: R$ ${moedaBR(item.totals.gastos)} • Lucro: ${item.totals.lucro>=0 ? 'R$ ' : '-R$ '}${moedaBR(Math.abs(item.totals.lucro))}</div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="btn secondary" onclick="loadFechamento(${items.length - 1 - idx})">Carregar</button>
+        <button class="btn" onclick="downloadOneJSON(${items.length - 1 - idx})">Baixar</button>
+        <button class="btn secondary" onclick="deleteOne(${items.length - 1 - idx})">Excluir</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// create a structured object from current inputs
+function collectCurrentFechamento(){
+  const gastos = Array.from(document.querySelectorAll('#table-gastos tbody tr')).map(tr => ({
+    desc: tr.querySelector('[data-type="gasto-name"]').value || '',
+    value: Number(tr.querySelector('[data-type="gasto-value"]').value || 0)
+  }));
+  const compras = Array.from(document.querySelectorAll('#table-compras tbody tr')).map(tr => ({
+    desc: tr.querySelector('[data-type="comp-name"]').value || '',
+    value: Number(tr.querySelector('[data-type="comp-value"]').value || 0)
+  }));
+  const vendas = Array.from(document.querySelectorAll('#table-vendas tbody tr')).map(tr => ({
+    desc: tr.querySelector('[data-type="venda-name"]').value || '',
+    value: Number(tr.querySelector('[data-type="venda-value"]').value || 0)
+  }));
+  const totals = {
+    vendas: vendas.reduce((s,i)=> s + i.value, 0),
+    gastos: gastos.reduce((s,i)=> s + i.value, 0) + compras.reduce((s,i)=> s + i.value, 0),
+  };
+  totals.lucro = totals.vendas - totals.gastos;
+  return {
+    date: new Date().toLocaleString('pt-BR'),
+    title: 'Fechamento rápido',
+    details: {gastos, compras, vendas},
+    totals
+  };
+}
+
+function salvarFechamento(){
+  const current = collectCurrentFechamento();
+  let items = loadHistory();
+  items.push(current);
+  saveHistory(items);
+  alert('Fechamento salvo no histórico local.');
+}
+
+function exportarCSV(){
+  const current = collectCurrentFechamento();
+  const rows = [];
+  rows.push(['Tipo','Descrição','Valor']);
+  current.details.gastos.forEach(g => rows.push(['Gasto', g.desc, g.value]));
+  current.details.compras.forEach(c => rows.push(['Compra', c.desc, c.value]));
+  current.details.vendas.forEach(v => rows.push(['Venda', v.desc, v.value]));
+  rows.push([]);
+  rows.push(['Totais','', '']);
+  rows.push(['Total Vendas', '', current.totals.vendas]);
+  rows.push(['Total Gastos', '', current.totals.gastos]);
+  rows.push(['Lucro', '', current.totals.lucro]);
+  downloadCSVFromRows(rows, 'fechamento_lounge.csv');
+}
+
+function exportarJSONAtual(){
+  const current = collectCurrentFechamento();
+  const blob = new Blob([JSON.stringify(current, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'fechamento_lounge.json'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+function exportAllCSV(){
+  const items = loadHistory();
+  if(!items || items.length===0){ alert('Nenhum fechamento salvo.'); return; }
+  const rows = [];
+  rows.push(['Data','Tipo','Descrição','Valor']);
+  items.forEach(it => {
+    it.details.gastos.forEach(g => rows.push([it.date, 'Gasto', g.desc, g.value]));
+    it.details.compras.forEach(c => rows.push([it.date, 'Compra', c.desc, c.value]));
+    it.details.vendas.forEach(v => rows.push([it.date, 'Venda', v.desc, v.value]));
+    rows.push([it.date, 'Total Vendas', '', it.totals.vendas]);
+    rows.push([it.date, 'Total Gastos', '', it.totals.gastos]);
+    rows.push([it.date, 'Lucro', '', it.totals.lucro]);
+    rows.push([]);
+  });
+  downloadCSVFromRows(rows, 'fechamentos_lounge_all.csv');
+}
+
+function exportAllJSON(){
+  const items = loadHistory();
+  if(!items || items.length===0){ alert('Nenhum fechamento salvo.'); return; }
+  const blob = new Blob([JSON.stringify(items, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'fechamentos_lounge_all.json'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+function downloadCSVFromRows(rows, filename){
+  const csvContent = rows.map(r => r.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+}
+
+function loadFechamento(index){
+  const items = loadHistory();
+  const it = items[index];
+  if(!it){ alert('Item não encontrado'); return; }
+  const tbodyG = document.querySelector('#table-gastos tbody'); tbodyG.innerHTML='';
+  const tbodyC = document.querySelector('#table-compras tbody'); tbodyC.innerHTML='';
+  const tbodyV = document.querySelector('#table-vendas tbody'); tbodyV.innerHTML='';
+  it.details.gastos.forEach(g => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><input type="text" value="${escapeHtml(g.desc)}" data-type="gasto-name"></td><td class="value"><input type="number" value="${g.value}" data-type="gasto-value" min="0"></td>`;
+    tbodyG.appendChild(tr);
+  });
+  it.details.compras.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><input type="text" value="${escapeHtml(c.desc)}" data-type="comp-name"></td><td class="value"><input type="number" value="${c.value}" data-type="comp-value" min="0"></td>`;
+    tbodyC.appendChild(tr);
+  });
+  it.details.vendas.forEach(v => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><input type="text" value="${escapeHtml(v.desc)}" data-type="venda-name"></td><td class="value"><input type="number" value="${v.value}" data-type="venda-value" min="0"></td>`;
+    tbodyV.appendChild(tr);
+  });
+  attachListeners();
+  recalc();
+  window.scrollTo({top:0, behavior:'smooth'});
+  alert('Fechamento carregado na tela. Você pode editar e salvar como novo fechamento.');
+}
+
+function deleteOne(index){
+  if(!confirm('Excluir este fechamento?')) return;
+  const items = loadHistory();
+  items.splice(index,1);
+  saveHistory(items);
+}
+
+function downloadOneJSON(index){
+  const items = loadHistory();
+  const it = items[index];
+  if(!it){ alert('Item não encontrado'); return; }
+  const blob = new Blob([JSON.stringify(it, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `fechamento_${index}.json`; document.body.appendChild(a); a.click(); a.remove();
+}
+
+function confirmClearHistory(){
+  if(!confirm('Tem certeza que deseja limpar todo o histórico? Essa ação não pode ser desfeita.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderHistory([]);
+  alert('Histórico limpo.');
+}
+
+function escapeHtml(text){ return String(text).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// initialize
+loadHistory();
+
+</script>
+</body>
+</html>
